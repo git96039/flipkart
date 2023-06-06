@@ -17,11 +17,11 @@ public class BeforeTag {
         this.common=new Common(Common.driver);
     }
 
-    @Before("@na")
+    @Before("@le or @na or @tr")
     public void NavigateNaukriLoginPageUrl() throws Exception {
         common.getDriver();
         String url = common.readPropertesFail("src/test/resources/application.properties", "url");
-        System.out.println("hemadri"+ pageObject.siteAdmin);
+        System.out.println("hemadri"+ pageObject.corporate);
         common.naviagteToUrl(url);
     }
 //    @After("@na")
@@ -31,8 +31,8 @@ public class BeforeTag {
 //            System.out.println("data creation status-------------------" + RMStatus);
 //        }
 //    }
-    @After
-    public void teardown(Scenario scenario) {
+    @After("@d")
+    public void teardown(Scenario scenario) throws Exception {
         if(scenario.isFailed()) {
             try {
                 byte[] screenshot = ((TakesScreenshot)common).getScreenshotAs(OutputType.BYTES);
@@ -41,7 +41,12 @@ public class BeforeTag {
                 System.err.println(noSupportScreenshot.getMessage());
             }
         }
-        common.quitBrowser();
+        common.tearDown();
     }
+    @After
+    public void teardown() throws Exception{
+        common.tearDown();
+    }
+
 
 }

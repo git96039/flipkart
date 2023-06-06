@@ -9,11 +9,11 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import java.io.IOException;
 
 public class DriverFactor {
-    public static WebDriver m_driver;
+    public static WebDriver driver;
     public static String browser="chrome";
 
-    DriverFactor(WebDriver driver){
-        this.m_driver=driver;
+     DriverFactor(WebDriver driver){
+        DriverFactor.driver=driver;
     }
     public WebDriver lunchBrowser() throws IOException {
         System.out.println("chrome broser started");
@@ -23,22 +23,22 @@ public class DriverFactor {
             WebDriverManager.chromedriver().setup();
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.addArguments("--remote-allow-origins=*");
-            m_driver = new ChromeDriver(chromeOptions);
-            m_driver.manage().window().maximize();
+            driver = new ChromeDriver(chromeOptions);
+            driver.manage().window().maximize();
         } else if (browserType.equalsIgnoreCase("firefox")) {
             WebDriverManager.firefoxdriver().setup();
-            m_driver = new FirefoxDriver();
+            driver = new FirefoxDriver();
         }
-        return m_driver;
+        return driver;
     }
     public WebDriver getDriver() {
         try{
-            if (m_driver == null)
-                m_driver = lunchBrowser();
+            if (driver == null)
+                driver = lunchBrowser();
         }
         catch (IOException e){
 
         }
-        return m_driver;
+        return driver;
     }
 }

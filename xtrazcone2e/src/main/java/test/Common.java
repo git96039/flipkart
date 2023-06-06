@@ -20,12 +20,13 @@ public class Common extends DriverFactor {
 
 private static final Logger log = Logger.getLogger(Common.class.getName());
     public By local_by = null;
-    public WebElement local_element = null;
-    public static WebDriver driver=null;
+//    public WebElement local_element = null;
+//    public static WebDriver driver;
 
     public String label = null;
     public Common(WebDriver driver) {
         super(driver);
+//        this.driver=driver;
     }
 
 
@@ -36,59 +37,95 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
         return p.getProperty(key);
     }
 
-    public Map<String, String> readFileWithJavaProperties(String s) throws IOException {
-        FileInputStream f = new FileInputStream(s);
-        Properties properties = new Properties();
-        Map<String, String> propertyMap = new HashMap<>();
-        properties.load(f);
-        for (String key1 : properties.stringPropertyNames()) {
-            System.out.println("reddy"+key1);
-            String value = properties.getProperty(key1);
-            String[] v = value.split(":");
-            System.out.println("reddy1"+v[1]);
-            propertyMap.put(key1, v[1]);
-        }
-        return propertyMap;
-    }
+//    public Map<String, String> readFileWithJavaProperties(String s) throws IOException {
+//        FileInputStream f = new FileInputStream(s);
+//        Properties properties = new Properties();
+//        Map<String, String> propertyMap = new HashMap<>();
+//        properties.load(f);
+//        for (String key1 : properties.stringPropertyNames()) {
+//            System.out.println("reddy"+key1);
+//            String value = properties.getProperty(key1);
+//            String[] v = value.split(":");
+//            System.out.println("reddy1"+v[0]);
+//            propertyMap.put(key1, v[0]);
+//        }
+//        return propertyMap;
+//    }
 
     public void naviagteToUrl(String s) {
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         driver.get(s);
     }
 
-    public By retriveLocators(String value) throws IOException {
-//        Map<String, String> va=readFileWithJavaProperties(s);
-//              String value= Arrays.toString(va.get(key).split("="));
-        String[] v = value.split("=",2);
-//        String k;
-//        if (v[0].length()>=5){
-//            k=v[1].concat("="+v[2]);
+//    public By retriveLocators(String value) throws IOException {
+////        Map<String, String> va=readFileWithJavaProperties(s);
+////              String value= Arrays.toString(va.get(key).split("="));
+//        String[] v = value.split("=",2);
+////        String k;
+////        if (v[0].length()>=5){
+////            k=v[1].concat("="+v[2]);
+////        }
+////        else {
+////            k=v[1];
+////        }
+////        String xpathh= v[1];
+////        String afterXpath="";
+////        if (v.length > 2){
+////            afterXpath=v[1]+v[2].trim();
+////        }
+//        By locator;
+//        switch (v[0]){
+//            case "id":
+//                locator= By.id(v[1]);
+//                break;
+//            case "name":
+//                locator=By.name(v[1]);
+//                break;
+//            case "xpath":
+//                locator=By.xpath(v[1]);
+//                break;
+//            default:
+//                throw new IllegalStateException("Unexpected value: " + v[0]);
 //        }
-//        else {
-//            k=v[1];
-//        }
-//        String xpathh= v[1];
-//        String afterXpath="";
-//        if (v.length > 2){
-//            afterXpath=v[1]+v[2].trim();
-//        }
-        By locator;
-        switch (v[0]){
+//          this.local_by=locator;
+//        return locator;
+//    }
+    public By retriveLocators(String element) throws Exception {
+        log.info("RetriveLocators are started");
+        By locator = null;
+        String[] beforeSplit = element.split(":", 2);
+        this.label = beforeSplit[0];
+        String[] defineLocator = beforeSplit[1].split("=", 2);
+        String locatorType = defineLocator[0];
+        String locatorValue = defineLocator[1];
+        switch (locatorType) {
             case "id":
-                locator= By.id(v[1]);
+                locator = By.id(locatorValue);
                 break;
-            case "name":
-                locator=By.name(v[1]);
+            case "class":
+                locator = By.className(locatorValue);
+                break;
+            case "css":
+                locator = By.cssSelector(locatorValue);
                 break;
             case "xpath":
-                locator=By.xpath(v[1]);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + v[0]);
+                locator = By.xpath(locatorValue);
         }
-          this.local_by=locator;
+
+        this.local_by = locator;
+        log.info("RetriveLocators has returned with locator Type as " + locatorType + " and value = " + locator);
         return locator;
     }
+
+
+
+
+
+
+
+
+
+
     public void quitBrowser(){
         driver.quit();
     }
@@ -118,33 +155,34 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
         this.waitForTheElement(locator, "VISIBILITY_OF_ELEMENT_LOCATED");
         WebElement e=driver.findElement(locator);
         this.scroll(this.local_by);
-        this.local_element = driver.findElement(this.local_by);
-        this.local_element.click();
+//        WebElement e = driver.findElement(this.local_by);
+        e.click();
 
-        this.local_element.clear();
-        this.local_element.sendKeys(new CharSequence[]{valueToEnter});
+        e.clear();
+       e.sendKeys(new CharSequence[]{valueToEnter});
         log.info(valueToEnter + " has been entered in " + this.label);
         log.info("enterText Ended");
     }
-    public void isElementVisible(By locter) throws Exception{
+    public Boolean isElementVisible(By locter) throws Exception{
         waitForTheElement(locter,"CLICKABILITY_OF_ELEMENT_LOCATED");
-        driver.findElement(locter).isDisplayed();
+        Boolean b=driver.findElement(locter).isDisplayed();
+        return b;
     }
     public void clickUsingJSexe(By a_element) throws Exception {
         log.info("clickUsingJSexe started");
-        new WebDriverWait(m_driver, Duration.ofSeconds(15L));
-        WebElement w_element1 = m_driver.findElement(a_element);
-        JavascriptExecutor w_executor = (JavascriptExecutor)m_driver;
+        new WebDriverWait(driver, Duration.ofSeconds(15L));
+        WebElement w_element1 = driver.findElement(a_element);
+        JavascriptExecutor w_executor = (JavascriptExecutor)driver;
         w_executor.executeScript("arguments[0].click();", new Object[]{w_element1});
         log.info("clickUsingJSexe completed");
     }
 
     public void elementDoubleClick(By a_element) throws Exception {
         log.info("elementDoubleClick started");
-        Actions w_actions = new Actions(m_driver);
-        WebDriverWait w_wait = new WebDriverWait(m_driver, Duration.ofSeconds(15L));
+        Actions w_actions = new Actions(driver);
+        WebDriverWait w_wait = new WebDriverWait(driver, Duration.ofSeconds(15L));
         w_wait.until(ExpectedConditions.visibilityOfElementLocated(a_element));
-        WebElement w_ele = m_driver.findElement(a_element);
+        WebElement w_ele = driver.findElement(a_element);
         w_actions.doubleClick(w_ele).perform();
         log.info("elementDoubleClick completed");
     }
@@ -152,8 +190,8 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
     public boolean verifyElementDisplayed(String element) throws Exception {
         this.waitForTheElement(this.retriveLocators(element), "VISIBILITY_OF_ELEMENT_LOCATED");
         this.scroll(this.local_by);
-        this.local_element = driver.findElement(this.local_by);
-        boolean visible = this.local_element.isDisplayed();
+       WebElement e = driver.findElement(this.local_by);
+        boolean visible = e.isDisplayed();
         if (visible) {
             log.info(this.label + " is displayed");
         } else {
@@ -175,8 +213,8 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
         log.info("Get Text Started");
         this.waitForTheElement(this.retriveLocators(element), "VISIBILITY_OF_ELEMENT_LOCATED");
         this.scroll(this.local_by);
-        this.local_element = driver.findElement(this.local_by);
-        String elementText = this.local_element.getText();
+        WebElement e = driver.findElement(this.local_by);
+        String elementText = e.getText();
         log.info("Text : " + elementText + " is retirved");
         return elementText;
     }
@@ -213,8 +251,8 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
     public void scroll(By element) throws Exception {
         log.info("Scroll to Element Started");
         JavascriptExecutor w_js = (JavascriptExecutor)driver;
-        this.local_element = driver.findElement(element);
-        w_js.executeScript("arguments[0].scrollIntoView();", new Object[]{this.local_element});
+        WebElement e = driver.findElement(element);
+        w_js.executeScript("arguments[0].scrollIntoView();", new Object[]{e});
         log.info("Scroll to Element Completed");
     }
 
@@ -233,7 +271,7 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
         driver.get(url);
     }
 
-    public Map<String, String> readPropertiesFile(String propertyFile) {
+    public Map<String, String> readFileWithJavaProperties(String propertyFile) {
         Map<String, String> map = null;
 
         try {
@@ -256,10 +294,10 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
 
     public void appendText(String locator, String textToBeAppended) throws Exception {
         log.info("appendText Started");
-        this.local_element = driver.findElement(this.retriveLocators(locator));
-        this.local_element.sendKeys(new CharSequence[]{Keys.CONTROL, Keys.END});
-        this.local_element.sendKeys(new CharSequence[]{" " + textToBeAppended});
-        this.local_element.sendKeys(new CharSequence[]{Keys.ENTER});
+        WebElement e = driver.findElement(this.retriveLocators(locator));
+        e.sendKeys(new CharSequence[]{Keys.CONTROL, Keys.END});
+        e.sendKeys(new CharSequence[]{" " + textToBeAppended});
+        e.sendKeys(new CharSequence[]{Keys.ENTER});
         log.info("appendText completed");
     }
 
@@ -271,7 +309,6 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
     }
 
     /** @deprecated */
-    @Deprecated
     public String dynamicXpathGenerator(String identifier, String inputValue) {
         log.info("dynamicXpathGenerator started");
         String str = identifier.replace("<dynamic value>", inputValue);
@@ -303,45 +340,45 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
     public void enterChordKeys(By a_element, Keys a_key, String b_key) throws Exception {
         log.info("enterChordKeys started");
         this.waitForTheElement(a_element, "VISIBILITY_OF_ELEMENT_LOCATED");
-        m_driver.findElement(a_element).sendKeys(new CharSequence[]{a_key, Keys.chord(new CharSequence[]{b_key})});
+        driver.findElement(a_element).sendKeys(new CharSequence[]{a_key, Keys.chord(new CharSequence[]{b_key})});
         log.info("enterChordKeys completed");
     }
 
     public void tearDown() throws Exception {
         log.info("tearDown started");
-        m_driver.quit();
+        driver.quit();
         log.info("tearDown completed");
     }
 
     public void switchFrame(String a_framename) throws Exception {
         log.info("switchFrame started");
-        m_driver.switchTo().frame(a_framename);
+        driver.switchTo().frame(a_framename);
         log.info("switchFrame completed");
     }
 
     public void switchToDefaultFrame() throws Exception {
         log.info("switchToDefaultFrame started");
-        m_driver.switchTo().defaultContent();
+        driver.switchTo().defaultContent();
         log.info("switchToDefaultFrame completed");
     }
 
     public void switchToParentFrame() throws Exception {
         log.info("switchToParentFrame started");
-        m_driver.switchTo().parentFrame();
+        driver.switchTo().parentFrame();
         log.info("switchToParentFrame completed");
     }
 
     public void switchFrameByXpath(By w_element) throws Exception {
         log.info("switchFrameByXpath started");
-        WebElement w_identifiedElement = m_driver.findElement(w_element);
-        m_driver.switchTo().frame(w_identifiedElement);
+        WebElement w_identifiedElement = driver.findElement(w_element);
+        driver.switchTo().frame(w_identifiedElement);
         log.info("INFO ---- Switched to frame through an element identified using xpath");
         log.info("switchFrameByXpath completed");
     }
 
     public void pasteFromClipBoard() {
         try {
-            Actions builder = new Actions(m_driver);
+            Actions builder = new Actions(driver);
             builder.keyDown(Keys.CONTROL).sendKeys(new CharSequence[]{"v"}).keyUp(Keys.CONTROL).build().perform();
             Thread.sleep(4000L);
         } catch (Exception var2) {
@@ -366,23 +403,23 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
     }
 
     public void refreshBrowser() {
-        m_driver.navigate().refresh();
+        driver.navigate().refresh();
     }
 
     public void browserNavigation(String navigateType) {
         if (navigateType.equalsIgnoreCase("back")) {
-            m_driver.navigate().back();
+            driver.navigate().back();
         }
 
         if (navigateType.equalsIgnoreCase("forward")) {
-            m_driver.navigate().forward();
+            driver.navigate().forward();
         }
 
     }
 
     public void elementimplicitlyWait(int timeunit) throws Exception {
         log.info("elementimplicitlyWait started");
-        m_driver.manage().timeouts().implicitlyWait(Duration.ofSeconds((long)timeunit));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds((long)timeunit));
         log.info("elementimplicitlyWait completed");
     }
 
