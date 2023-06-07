@@ -4,9 +4,6 @@ import com.xtrazcon.cloud.test.pageobject.pageObject;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriverException;
 import test.Common;
 
 
@@ -17,7 +14,7 @@ public class BeforeTag {
         this.common=new Common(Common.driver);
     }
 
-    @Before("@le or @na or @tr")
+    @Before
     public void NavigateNaukriLoginPageUrl() throws Exception {
         common.getDriver();
         String url = common.readPropertesFail("src/test/resources/application.properties", "url");
@@ -31,20 +28,20 @@ public class BeforeTag {
 //            System.out.println("data creation status-------------------" + RMStatus);
 //        }
 //    }
-    @After("@d")
-    public void teardown(Scenario scenario) throws Exception {
-        if(scenario.isFailed()) {
-            try {
-                byte[] screenshot = ((TakesScreenshot)common).getScreenshotAs(OutputType.BYTES);
-                scenario.attach(screenshot, "image/png", "screenshot");
-            } catch (WebDriverException noSupportScreenshot) {
-                System.err.println(noSupportScreenshot.getMessage());
-            }
-        }
-        common.tearDown();
-    }
+//    @After("@d")
+//    public void teardown(Scenario scenario) throws Exception {
+//        if(scenario.isFailed()) {
+//            try {
+//                byte[] screenshot = ((TakesScreenshot)common).getScreenshotAs(OutputType.BYTES);
+//                scenario.attach(screenshot, "image/png", "screenshot");
+//            } catch (WebDriverException noSupportScreenshot) {
+//                System.err.println(noSupportScreenshot.getMessage());
+//            }
+//        }
+//        common.tearDown();
+//    }
     @After
-    public void teardown() throws Exception{
+    public void teardown(Scenario scenario) throws Exception{
         common.tearDown();
     }
 

@@ -28,12 +28,12 @@ public class StepDef extends Cache {
     @When("User fills the password {string}")
     public void user_fills_the_password(String password) {
         l.setPassword(password);
-
+        l.clickLoginbtn();
     }
 
     @Then("User should be able to verify dashboard")
-    public void user_should_be_able_to_verify_dashboard() {
-        l.clickLoginbtn();
-
+    public void user_should_be_able_to_verify_dashboard()  {
+        l.homePageLogoVerify();
+            l.logOut();
     }
 }
