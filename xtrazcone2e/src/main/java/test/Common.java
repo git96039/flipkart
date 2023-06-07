@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class Common extends DriverFactor {
 
 private static final Logger log = Logger.getLogger(Common.class.getName());
-    public By local_by = null;
+    public static By local_by = null;
 //    public WebElement local_element = null;
 //    public static WebDriver driver;
 
@@ -116,14 +116,6 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
         log.info("RetriveLocators has returned with locator Type as " + locatorType + " and value = " + locator);
         return locator;
     }
-
-
-
-
-
-
-
-
 
 
     public void quitBrowser(){
