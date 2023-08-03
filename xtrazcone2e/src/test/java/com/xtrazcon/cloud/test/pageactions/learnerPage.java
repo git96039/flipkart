@@ -3,6 +3,8 @@ package com.xtrazcon.cloud.test.pageactions;
 import com.xtrazcon.cloud.test.pageobject.pageObject;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 import test.Common;
 
 import java.util.Map;
@@ -20,6 +22,8 @@ public class learnerPage extends Common {
 
             System.out.println("hem"+retriveLocators(dynamicXpathGenerator(learner.get("loginAsLearner"),learnerType)));
             super.elementClick(retriveLocators(dynamicXpathGenerator(learner.get("loginAsLearner"),learnerType)));
+            SoftAssert softAssert=new SoftAssert();
+            softAssert.assertAll();
         }
         catch(Exception e){
 

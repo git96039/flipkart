@@ -3,11 +3,11 @@ Feature:xtrazcone
 
   @na
 Scenario Outline: login as corporate
-Given User opens corporate "<loginType>" login page
-When User fills emailid "<mailId>"
-And User fills the password "<Password>"
-Then User should be able to verify dashboard
+Given User opens flipkart site
+When User clicks on search
+And enter text "<product name>"
+Then User should be able to see desired results
 Examples:
-| mailId                       | Password  |loginType           |
-| sumitkumar21281104@gmail.com | 123456789 |Corporate/Enterprise|
+| product name    |
+| redmi12c 4 64 |
 

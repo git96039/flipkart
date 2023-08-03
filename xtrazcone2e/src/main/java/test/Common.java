@@ -339,6 +339,7 @@ private static final Logger log = Logger.getLogger(Common.class.getName());
     public void tearDown() throws Exception {
         log.info("tearDown started");
         driver.quit();
+        driver=null;
         log.info("tearDown completed");
     }
 

@@ -18,7 +18,6 @@ public class BeforeTag {
     public void NavigateNaukriLoginPageUrl() throws Exception {
         common.getDriver();
         String url = common.readPropertesFail("src/test/resources/application.properties", "url");
-        System.out.println("hemadri"+ pageObject.corporate);
         common.naviagteToUrl(url);
     }
 //    @After("@na")
