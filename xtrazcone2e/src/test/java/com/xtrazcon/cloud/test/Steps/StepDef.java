@@ -17,7 +17,7 @@ public class StepDef extends Cache {
 
     @Given("User opens flipkart site")
     public void userOpensFlipkartSite() throws Exception {
-
+        l.closeWindow();
     }
 
     @When("User clicks on search")
@@ -32,6 +32,7 @@ public class StepDef extends Cache {
     }
 
     @Then("User should be able to see desired results")
-    public void userShouldBeAbleToSeeDesiredResults() {
+    public void userShouldBeAbleToSeeDesiredResults() throws Exception {
+        l.validateProduct();
     }
 }

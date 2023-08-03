@@ -20,6 +20,7 @@ public class loginpage extends Common {
     }
 
     public void clickOnSearch() throws Exception {
+        Thread.sleep(500000);
         super.elementClick(retriveLocators(login.get("searchButton")));
     }
 
@@ -38,10 +39,10 @@ public class loginpage extends Common {
             throw new RuntimeException(e);
         }
     }
-
-
-
-
-
+    public void closeWindow() throws Exception {
+        Thread.sleep(5000);
+if(isElementVisible(By.xpath("//button[@class='_2KpZ6l _2doB4z']")))
+        super.elementClick(retriveLocators(login.get("enterClick")));
+    }
 }
 
